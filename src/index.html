@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Web Assembly Loading</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.2.0/css/uikit.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.2.0/js/uikit.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.2.0/js/uikit-icons.min.js"></script>
+
+    <style>
+        legend {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+
+    <main class="uk-container uk-container-xsmall uk-padding">
+        <form>
+            <fieldset class="uk-fieldset">
+                <legend class="uk-legend">Web Assembly Demo</legend>
+                <p>Enter a digit and hit 'Calculate' to get fibonacci number for the entered input with JS and WASM
+                    (calculated recursively).</p>
+
+                <input class="uk-input uk-width-3-4@s" type="number" placeholder="enter a number" id="number-input" />
+
+                <button class="uk-button uk-button-default" id="submit-button" onclick="return false">Submit</button>
+
+            </fieldset>
+        </form>
+
+
+
+    </main>
+
+    <section class="uk-container uk-container-xsmall">
+        <div class="uk-child-width-1-2@m uk-grid-small uk-grid-match" uk-grid>
+
+            <div>
+                <div class="uk-card uk-card-secondary uk-card-body">
+                    <h3 class="uk-card-title">Javascript</h3>
+                    <p id="js-result"></p>
+                </div>
+            </div>
+
+            <div>
+                <div class="uk-card uk-card-primary uk-card-body">
+                    <h3 class="uk-card-title">Web Assembly</h3>
+                    <p id="wasm-result"></p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+
+
+
+
+    <script src="./ts/index.ts"></script>
+</body>
+
+</html>

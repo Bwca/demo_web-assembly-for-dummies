@@ -1,0 +1,33 @@
+{
+  "name": "web-assembly-for-dummies",
+  "version": "1.0.0",
+  "description": "A simple project to demonstrate how Web Assembly modules can be generated with Typescript and imported into Typescript projects.",
+  "main": "index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "parcel src/index.html",
+    "build": "parcel build src/index.html",
+    "asbuild": "asc src/wasm/index.ts -b dist/wasm/optimized.wasm -t dist/wasm/optimized.wat --sourceMap --validate --optimize"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Bwca/web-assembly-for-dummies.git"
+  },
+  "keywords": [
+    "AssemblyScript",
+    "Web",
+    "Assembly",
+    "TypeScript"
+  ],
+  "author": "Vladimir Yepishev",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Bwca/web-assembly-for-dummies/issues"
+  },
+  "homepage": "https://github.com/Bwca/web-assembly-for-dummies#readme",
+  "devDependencies": {
+    "assemblyscript": "AssemblyScript/assemblyscript",
+    "parcel-bundler": "^1.12.3",
+    "typescript": "^3.6.3"
+  }
+}
