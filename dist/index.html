@@ -5,61 +5,86 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Web Assembly Loading</title>
+    <title>Web Assembly Demo</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.2.0/css/uikit.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.2.0/js/uikit.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.2.0/js/uikit-icons.min.js"></script>
-
-    <style>legend {
-            text-align: center;
-        }</style>
 </head>
 
 <body>
-
-
-    <main class="uk-container uk-container-xsmall uk-padding">
-        <form>
-            <fieldset class="uk-fieldset">
-                <legend class="uk-legend">Web Assembly Demo</legend>
-                <p>Enter a digit and hit 'Calculate' to get fibonacci number for the entered input with JS and WASM
-                    (calculated recursively).</p>
-
-                <input class="uk-input uk-width-3-4@s" type="number" placeholder="enter a number" id="number-input">
-
-                <button class="uk-button uk-button-default" id="submit-button" onclick="return false">Submit</button>
-
-            </fieldset>
-        </form>
-
-
-
+    <main uk-accordion="multiple: true" class="uk-container uk-container-xsmall uk-padding">
+        <section>
+            <a class="uk-accordion-title" href="#">Fibonacci calculation</a>
+            <section class="uk-accordion-content">
+                <form class="uk-form-horizontal uk-margin-large">
+                    <fieldset class="uk-fieldset">
+                        <legend class="uk-legend"></legend>
+                        <p>Enter a digit and hit 'Calculate' to get fibonacci number for the entered input with JS and
+                            WASM
+                            (calculated recursively).</p>
+                        <div class="uk-margin">
+                            <label class="uk-form-label" for="form-stacked-text">Number:</label>
+                            <div class="uk-form-controls">
+                                <input class="uk-input" type="number" placeholder="enter a number" id="number-input">
+                            </div>
+                        </div>
+                        <button class="uk-button uk-button-default uk-width-1@s" id="fib-submit-button" onclick="return false">Submit</button>
+                    </fieldset>
+                </form>
+                <div class="uk-child-width-1-2@m uk-grid-small uk-grid-match" uk-grid="">
+                    <div>
+                        <div class="uk-card uk-card-default uk-card-body">
+                            <h3 class="uk-card-title">Javascript</h3>
+                            <p id="fib-js-result"></p>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="uk-card uk-card-secondary uk-card-body">
+                            <h3 class="uk-card-title">Web Assembly</h3>
+                            <p id="fib-wasm-result"></p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </section>
+        <section>
+            <a class="uk-accordion-title" href="#">Substring replacement</a>
+            <section class="uk-accordion-content">
+                <form class="uk-form-horizontal uk-margin-large">
+                    <fieldset class="uk-fieldset">
+                        <p>Enter a string to replace in War and Peace volume one.</p>
+                        <div class="uk-margin">
+                            <label class="uk-form-label" for="form-stacked-text">Source string:</label>
+                            <div class="uk-form-controls">
+                                <input class="uk-input" type="text" placeholder="source string" id="search-string-input">
+                            </div>
+                        </div>
+                        <div class="uk-margin">
+                            <label class="uk-form-label" for="form-stacked-text">Replace string:</label>
+                            <div class="uk-form-controls">
+                                <input class="uk-input" type="text" placeholder="replace string" id="replace-string-input">
+                            </div>
+                        </div>
+                        <button class="uk-button uk-button-default uk-width-1@s" id="war-submit-button" onclick="return false">Submit</button>
+                    </fieldset>
+                </form>
+                <div class="uk-child-width-1-2@m uk-grid-small uk-grid-match" uk-grid="">
+                    <div>
+                        <div class="uk-card uk-card-default uk-card-body">
+                            <h3 class="uk-card-title">Javascript</h3>
+                            <p id="war-js-result"></p>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="uk-card uk-card-secondary uk-card-body">
+                            <h3 class="uk-card-title">Web Assembly</h3>
+                            <p id="war-wasm-result"></p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </section>
     </main>
-
-    <section class="uk-container uk-container-xsmall">
-        <div class="uk-child-width-1-2@m uk-grid-small uk-grid-match" uk-grid="">
-
-            <div>
-                <div class="uk-card uk-card-secondary uk-card-body">
-                    <h3 class="uk-card-title">Javascript</h3>
-                    <p id="js-result"></p>
-                </div>
-            </div>
-
-            <div>
-                <div class="uk-card uk-card-primary uk-card-body">
-                    <h3 class="uk-card-title">Web Assembly</h3>
-                    <p id="wasm-result"></p>
-                </div>
-            </div>
-
-        </div>
-    </section>
-
-
-
-
-
     <script src="/ts.841fc46b.js"></script>
 </body>
 

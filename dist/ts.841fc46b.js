@@ -127,9 +127,14 @@ var ElementIds;
 
 (function (ElementIds) {
   ElementIds["NumberInput"] = "number-input";
-  ElementIds["SubmitButton"] = "submit-button";
-  ElementIds["JSResultParagraph"] = "js-result";
-  ElementIds["WasmResultParagraph"] = "wasm-result";
+  ElementIds["SearchStringInput"] = "search-string-input";
+  ElementIds["ReplaceStringInput"] = "replace-string-input";
+  ElementIds["FibSubmitButton"] = "fib-submit-button";
+  ElementIds["WarSubmitButton"] = "war-submit-button";
+  ElementIds["JSFibResultParagraph"] = "fib-js-result";
+  ElementIds["JSWarResultParagraph"] = "war-js-result";
+  ElementIds["WasmFibResultParagraph"] = "fib-wasm-result";
+  ElementIds["WasmWarResultParagraph"] = "war-wasm-result";
 })(ElementIds = exports.ElementIds || (exports.ElementIds = {}));
 },{}],"../node_modules/assemblyscript/lib/loader/index.js":[function(require,module,exports) {
 "use strict";
@@ -561,11 +566,11 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-function getInputValue(inputId) {
+function getNumberFromInput(inputId) {
   return Number(document.getElementById(inputId).value);
 }
 
-exports.getInputValue = getInputValue;
+exports.getNumberFromInput = getNumberFromInput;
 },{}],"ts/functions/get-result-string.function.ts":[function(require,module,exports) {
 "use strict";
 
@@ -573,8 +578,14 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-function getResultString(fib, elapsedTime) {
-  return "result: " + fib + "\nelapsed time: " + elapsedTime;
+function getResultString(result, elapsedTime) {
+  var resultString = "elapsed time: " + elapsedTime;
+
+  if (result) {
+    resultString = "result: " + result + "\n" + resultString;
+  }
+
+  return resultString;
 }
 
 exports.getResultString = getResultString;
@@ -626,7 +637,8 @@ var loader_1 = require("assemblyscript/lib/loader");
 var index_1 = require("./functions/index");
 
 var wasmModule;
-var wasmModuleURL = '/wasm/optimized.wasm';
+var jsWarAndPeaceText;
+var wasmWarAndPeaceText;
 var imports = {
   env: {
     abort: function abort(_msg, _file, line, column) {
@@ -639,14 +651,57 @@ var imports = {
 };
 loadWasmModule();
 document.addEventListener('DOMContentLoaded', function () {
-  document.getElementById(element_ids_enum_1.ElementIds.SubmitButton).addEventListener('click', function () {
-    calculateFibonacciNumber(index_1.javascriptFibonacci, element_ids_enum_1.ElementIds.JSResultParagraph);
-    calculateFibonacciNumber(wasmModule.wasmFibonacci, element_ids_enum_1.ElementIds.WasmResultParagraph);
+  document.getElementById(element_ids_enum_1.ElementIds.FibSubmitButton).addEventListener('click', function () {
+    calculateFibonacciNumber(index_1.javascriptFibonacci, element_ids_enum_1.ElementIds.JSFibResultParagraph);
+    calculateFibonacciNumber(wasmModule.wasmFibonacci, element_ids_enum_1.ElementIds.WasmFibResultParagraph);
+  });
+  document.getElementById(element_ids_enum_1.ElementIds.WarSubmitButton).addEventListener('click', function () {
+    var search = document.getElementById(element_ids_enum_1.ElementIds.SearchStringInput).value;
+    var replace = document.getElementById(element_ids_enum_1.ElementIds.ReplaceStringInput).value;
+    var startTime;
+    var elapsedTime;
+    var result;
+    startTime = Date.now();
+    var re = new RegExp(search, 'g');
+    var jsResultString = jsWarAndPeaceText.replace(re, replace);
+    elapsedTime = index_1.getElapsedMiliSeconds(startTime);
+    result = index_1.getResultString(null, elapsedTime);
+    index_1.outputResult(element_ids_enum_1.ElementIds.JSWarResultParagraph, result);
+    startTime = Date.now();
+    var wasmResult = wasmModule.replaceString(wasmWarAndPeaceText, wasmModule.__allocString(search), wasmModule.__allocString(replace)); //const wasmResultAsString = wasmModule.__getString(wasmResult);
+
+    elapsedTime = index_1.getElapsedMiliSeconds(startTime);
+    result = index_1.getResultString(null, elapsedTime);
+    index_1.outputResult(element_ids_enum_1.ElementIds.WasmWarResultParagraph, result); //console.log(wasmResultAsString)
   });
 });
 
+function loadWasmModule() {
+  var url = '/wasm/optimized.wasm';
+  fetch(url).then(function (response) {
+    return response.arrayBuffer();
+  }).then(function (bytes) {
+    return loader_1.instantiateBuffer(new Uint8Array(bytes), imports);
+  }).then(function (bytes) {
+    return wasmModule = bytes;
+  }).then(function (_) {
+    loadWarAndPeace();
+  });
+}
+
+function loadWarAndPeace() {
+  var url = 'https://www.gutenberg.org/files/2600/2600-0.txt';
+  fetch(url).then(function (response) {
+    return response.text();
+  }).then(function (text) {
+    jsWarAndPeaceText = text;
+    wasmWarAndPeaceText = wasmModule.__allocString(text);
+    console.log('war and peace loaded', wasmWarAndPeaceText);
+  });
+}
+
 function calculateFibonacciNumber(fibonacciFunc, outputId) {
-  var inputValue = index_1.getInputValue(element_ids_enum_1.ElementIds.NumberInput);
+  var inputValue = index_1.getNumberFromInput(element_ids_enum_1.ElementIds.NumberInput);
   var startTime;
   var elapsedTime;
   startTime = Date.now();
@@ -654,16 +709,6 @@ function calculateFibonacciNumber(fibonacciFunc, outputId) {
   elapsedTime = index_1.getElapsedMiliSeconds(startTime);
   var result = index_1.getResultString(fib, elapsedTime);
   index_1.outputResult(outputId, result);
-}
-
-function loadWasmModule() {
-  fetch(wasmModuleURL).then(function (response) {
-    return response.arrayBuffer();
-  }).then(function (bytes) {
-    return loader_1.instantiateBuffer(new Uint8Array(bytes), imports);
-  }).then(function (bytes) {
-    wasmModule = bytes;
-  });
 }
 },{"./enums/element-ids.enum":"ts/enums/element-ids.enum.ts","assemblyscript/lib/loader":"../node_modules/assemblyscript/lib/loader/index.js","./functions/index":"ts/functions/index.ts"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
@@ -693,7 +738,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "45711" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "41871" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
