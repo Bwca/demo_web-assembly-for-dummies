@@ -668,11 +668,12 @@ document.addEventListener('DOMContentLoaded', function () {
     result = index_1.getResultString(null, elapsedTime);
     index_1.outputResult(element_ids_enum_1.ElementIds.JSWarResultParagraph, result);
     startTime = Date.now();
-    var wasmResult = wasmModule.replaceString(wasmWarAndPeaceText, wasmModule.__allocString(search), wasmModule.__allocString(replace)); //const wasmResultAsString = wasmModule.__getString(wasmResult);
-
+    var wasmResult = wasmModule.replaceString(wasmWarAndPeaceText, wasmModule.__allocString(search), wasmModule.__allocString(replace));
     elapsedTime = index_1.getElapsedMiliSeconds(startTime);
     result = index_1.getResultString(null, elapsedTime);
-    index_1.outputResult(element_ids_enum_1.ElementIds.WasmWarResultParagraph, result); //console.log(wasmResultAsString)
+    index_1.outputResult(element_ids_enum_1.ElementIds.WasmWarResultParagraph, result);
+    /* const wasmResultAsString = wasmModule.__getString(wasmResult);
+    console.log(wasmResultAsString); */
   });
 });
 
@@ -695,8 +696,7 @@ function loadWarAndPeace() {
     return response.text();
   }).then(function (text) {
     jsWarAndPeaceText = text;
-    wasmWarAndPeaceText = wasmModule.__allocString(text);
-    console.log('war and peace loaded', wasmWarAndPeaceText);
+    wasmWarAndPeaceText = wasmModule.__retain(wasmModule.__allocString(text));
   });
 }
 
@@ -738,7 +738,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "41871" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "38123" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

@@ -49,11 +49,13 @@ document.addEventListener('DOMContentLoaded', () => {
             wasmModule.__allocString(search),
             wasmModule.__allocString(replace)
              );
-        //const wasmResultAsString = wasmModule.__getString(wasmResult);
+        
         elapsedTime = getElapsedMiliSeconds(startTime);
         result = getResultString(null, elapsedTime);
         outputResult(ElementIds.WasmWarResultParagraph, result);
-        //console.log(wasmResultAsString)
+
+        /* const wasmResultAsString = wasmModule.__getString(wasmResult);
+        console.log(wasmResultAsString); */
     })
 
 });
@@ -77,8 +79,7 @@ function loadWarAndPeace():void{
     .then(response => response.text())
     .then(text => {
         jsWarAndPeaceText = text;
-        wasmWarAndPeaceText = wasmModule.__allocString(text);
-        console.log('war and peace loaded', wasmWarAndPeaceText);
+        wasmWarAndPeaceText = wasmModule.__retain( wasmModule.__allocString(text));
     });
 }
 
